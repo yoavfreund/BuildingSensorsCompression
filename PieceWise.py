@@ -105,11 +105,17 @@ class piecewise_constant(encoder):
 
 import pickle
 import pandas as pd 
+import sys
 
 out=open('Compressed.pkl','w')
 A=pickle.load(open('New150Days.pkl','r'))
-A=A.dropna(subset=['Rooms'])
+print 'shape before dropping Room==nan =',shape(A)
+A=A.dropna(subset=['Room'])
+print 'shape after dropping Room==nan =',shape(A)
 rooms=sorted(list(set(A.Room.values)))
+
+print 'starting Piecewise, rooms=',rooms
+sys.stdout.flush()
 
 cols = list(A.columns)
 cols.remove('Room')
@@ -117,6 +123,7 @@ cols.remove('Temperature')
 
 for room in rooms[:10]:
     print '-'*20,room,'-'*20
+    sys.stdout.flush()
     DF = A[A['Room']==room]
     DF = DF.drop('Room', 1)  # remove the entry "Room"
     for name in cols:
